@@ -1,6 +1,6 @@
 # MathsForR
 
-> Diagonalisation, interpolation polynomiale, SVD et ACP implémentés en R — Projet trimestriel ESGI 4ABD 2026
+> Diagonalisation, interpolation polynomiale, SVD et ACP implémentés en R — Projet trimestriel ESGI 4IABD 2026
 
 ## Contenu du projet
 
@@ -57,7 +57,7 @@ MathsForR/
 ```
 
 - Projet réalisé dans le cadre du cours **Mathématiques pour le BD avec R**
-- ESGI — 4ème année Big Data — 2026
+- ESGI — 4ème année IA & Big Data — 2026
 
 ## 📝 Consignes
 
