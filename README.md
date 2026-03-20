@@ -49,6 +49,7 @@ MathsForR/
 ├── 4_acp/
 │   ├── europe_data.R
 │   └── acp_analyse.R
+|   └── README.md
 ├── data/
 │   └── europe.csv
 ├── rapport/
@@ -56,11 +57,12 @@ MathsForR/
 └── README.md
 ```
 
-- Projet réalisé dans le cadre du cours **Mathématiques pour le BD avec R**
-- ESGI — 4ème année IA & Big Data — 2026
-
 ## 📝 Consignes
 
 - Tous les résultats sont arrondis à 10⁻² près
 - Chaque traitement est accompagné de son script R
 - Les résultats sont présentés avec tracés et tableaux de calcul
+
+---
+
+*Projet académique — ESGI — Mathématiques avancées pour le big data avec R — Avril 2026*
