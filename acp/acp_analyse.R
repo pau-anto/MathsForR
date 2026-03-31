@@ -1,0 +1,1 @@
+df = read.table("C:\\Users\\Julien ANTOGNELLI\\Documents\\ESGI\\Maths\\MathsForR\\data\\Donnees Europe.dat", skip=0)
