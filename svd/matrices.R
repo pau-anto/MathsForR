@@ -1,19 +1,10 @@
-# ============================================================
-# PROJET : Décomposition SVD et Pseudo-inverse
-# Mathématiques pour le Big Data — ESGI 4ABD
-# ============================================================
-
-# ============================================================
-# PARTIE 1 — Nos outils de calcul
-# ============================================================
-
-# Création de notre propre fonction SVD
+# Création de notre propre foncion SVD
 ma_svd <- function(A) {
   # On commence par calculer la matrice de corrélation
   AtA <- t(A) %*% A
   eigen_res <- eigen(AtA)
   
-  # On trie les résultats par ordre d'importance (valeurs propres décroissantes)
+  # On trie les résultats par ordre d'importance
   ordre <- order(eigen_res$values, decreasing = TRUE)
   valeurs_propres <- eigen_res$values[ordre]
   V <- eigen_res$vectors[, ordre]
@@ -22,17 +13,17 @@ ma_svd <- function(A) {
   r <- sum(valeurs_propres > 1e-10)
   sigma <- sqrt(valeurs_propres[1:r])
   
-  # Construction de la matrice U à partir de A et V
+  # Construction de la matrice U a partir de A et V
   Vr <- V[, 1:r, drop = FALSE]
   U_r_brut <- A %*% Vr
   Ur <- apply(U_r_brut, 2, function(col) col / sqrt(sum(col^2)))
   
-  # Préparation de la matrice Sigma (aux bonnes dimensions)
+  # Préparation de la matrice Sigma
   m <- nrow(A); n <- ncol(A)
   Sigma <- matrix(0, nrow = m, ncol = n)
   for (i in 1:r) Sigma[i, i] <- sigma[i]
   
-  # Si nécessaire, on complète Ur pour qu'elle soit une base orthonormée complète
+
   if (ncol(Ur) < m) {
     Ur <- qr.Q(qr(cbind(Ur, matrix(rnorm(m * (m - r)), m, m - r))))
   }
@@ -47,7 +38,7 @@ pseudo_inverse <- function(A, tol = 1e-10) {
   Ur  <- res$U[, 1:r, drop = FALSE]
   Vr  <- res$V[, 1:r, drop = FALSE]
   
-  # On inverse uniquement les valeurs singulières non nulles
+  # On inverse que les valeurs singulière non nulle
   D_inv <- diag(1 / res$sigma[1:r], nrow = r)
   return(Vr %*% D_inv %*% t(Ur))
 }
@@ -80,10 +71,10 @@ resoudre_systeme <- function(A, b) {
   x_sol  <- A_plus %*% b
   residu <- sqrt(sum((A %*% x_sol - b)^2))
   
-  cat("\n--- Solution trouvée (x) ---\n")
+  cat("\n--- Solution trouvée ---\n")
   print(round(x_sol, 2))
   
-  cat("\nPetit check de vérification (A * x) :\n")
+  cat("\nnotre petit check de vérification (A * x) :\n")
   print(round(A %*% x_sol, 2))
   
   cat("\nValeur cible (b) :\n")
@@ -91,18 +82,17 @@ resoudre_systeme <- function(A, b) {
   
   cat("\nÉcart constaté (résidu) :", round(residu, 6), "\n")
   if (residu < 1e-8) {
-    cat("Le résidu est quasi nul : on a trouvé une solution exacte.\n")
+    cat("Le résidu est quasi nul,  on a trouvé une solution exacte.\n")
   } else {
-    cat("On a une solution approchée (optimale au sens des moindres carrés).\n")
+    cat("On a une solution approché.\n")
   }
   
   return(invisible(list(x = x_sol, residu = residu, 
                         rang_A = rang_A, rang_aug = rang_aug)))
 }
 
-# ============================================================
 # PARTIE 2 — Étude du premier cas (Section 3.2)
-# ============================================================
+
 
 A1 <- matrix(c(-18, 2,-14, -2,
                13,19, 11, 21,
@@ -121,12 +111,12 @@ cat("\n****************************************\n")
 cat("  ANALYSE SVD : MATRICE A1\n")
 cat("****************************************\n")
 svd_A1 <- ma_svd(A1)
-cat("Valeurs singulières (sigma) :", round(svd_A1$sigma, 2), "\n")
+cat("Valeurs singulière (sigma) :", round(svd_A1$sigma, 2), "\n")
 cat("Rang détecté :", svd_A1$r, "\n")
 
 # On vérifie si on arrive à reconstruire la matrice de base
 reconstitution_A1 <- svd_A1$U %*% svd_A1$Sigma %*% t(svd_A1$V)
-cat("Précision de la reconstruction (écart max) :", 
+cat("Précision de la reconstrution (écart max) :", 
     round(max(abs(reconstitution_A1 - A1)), 8), "\n")
 
 # Test rapide avec la fonction standard de R pour comparer
@@ -147,9 +137,9 @@ cat("Précision de la reconstruction (écart max) :",
 svd_native_B1 <- svd(B1)
 cat("Valeurs singulières de référence (R natif) :", round(svd_native_B1$d, 2), "\n")
 
-# ============================================================
+
 # PARTIE 3 — Étude du second cas (Section 3.3)
-# ============================================================
+
 
 A2 <- matrix(c(-3,-1, 0, 0,
                -3,-1, 0, 0,
