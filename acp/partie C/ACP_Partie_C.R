@@ -17,10 +17,6 @@ data_actif <- data[rownames(data) != "lu", ]
 n <- nrow(data_actif)
 p <- ncol(data_actif)
 
-
-
-# C.1 : CENTRAGE-RÉDUCTION ET TABLEAUX
-
 # ACP normée sur les individus actifs (lu mis en supplémentaire)
 # On remet lu temporairement dans le jeu pour qu'il soit projeté
 data_avec_lu <- rbind(data_actif, lu_data)
@@ -31,59 +27,6 @@ res.pca <- PCA(data_avec_lu, scale.unit = TRUE, ncp = 4,
 
 lambda      <- res.pca$eig[, 1]       # valeurs propres
 pays_actifs <- rownames(data_actif)
-
-cat("=== Variances des 4 premières composantes principales ===\n")
-variances_cp <- data.frame(
-  Axe          = paste0("F", 1:4),
-  Valeur_propre = round(lambda[1:4], 4),
-  Part_inertie  = round(res.pca$eig[1:4, 2], 2),
-  Inertie_cum   = round(res.pca$eig[1:4, 3], 2)
-)
-print(variances_cp)
-
-cat("\n=== Tableau des corrélations variables / composantes principales ===\n")
-corr_var <- round(res.pca$var$cor[, 1:4], 4)
-print(corr_var)
-
-cat("\n=== Coordonnées des individus actifs (4 premiers axes) ===\n")
-coords_ind <- round(res.pca$ind$coord[, 1:4], 4)
-print(coords_ind)
-
-cat("\n=== Coordonnées de lu (individu supplémentaire) ===\n")
-print(round(res.pca$ind.sup$coord[, 1:4], 4))
-
-cat("\n=== Contributions des individus aux axes (%) — seuil = 1/n =",
-    round(100/n, 2), "% ===\n")
-contrib <- round(res.pca$ind$contrib[, 1:4], 2)
-print(contrib)
-
-cat("\n=== Qualités de représentation cos² * 100 ===\n")
-cos2 <- round(100 * res.pca$ind$cos2[, 1:4], 2)
-print(cos2)
-
-
-
-
-
-# C.2 : NOMBRE DE COMPOSANTES ET QUALITÉ GLOBALE
-
-n_retain <- sum(lambda > 1)
-cat("\n=== C.2 : Critère de Kaiser ===\n")
-cat("Axes retenus (λ > 1) :", n_retain, "\n")
-cat("Inertie expliquée    :", round(res.pca$eig[n_retain, 3], 2), "%\n")
-
-png("eboulis_sans_lu.png", width = 800, height = 500)
-barplot(lambda, names.arg = paste0("F", seq_along(lambda)),
-        col  = ifelse(lambda > 1, "steelblue", "lightgray"),
-        main = "Éboulis des valeurs propres (sans lu)",
-        xlab = "Composante principale", ylab = "Valeur propre")
-abline(h = 1, col = "red", lty = 2, lwd = 2)
-legend("topright", c("λ > 1 (retenu)", "λ ≤ 1", "Seuil Kaiser"),
-       fill = c("steelblue","lightgray", NA),
-       lty  = c(NA, NA, 2), col = c(NA, NA, "red"), lwd = c(NA, NA, 2))
-dev.off()
-
-
 
 
 
